@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meuappnovo/views/produtos_lista.dart';
+import 'package:provider/provider.dart';
+import 'package:usarprovide/controller/inc_controller.dart';
+import 'package:usarprovide/view/home_view.dart';
+
+import 'app_routes.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,10 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProdutosLista(),
+      home: ChangeNotifierProvider(
+        create: (_) => IncController(),
+        child: HomeView(),
+      ),
+      routes: AppRoutes.rotas,
     );
   }
 }

@@ -1,4 +1,4 @@
-package com.example.meuappnovo
+package com.example.usarprovide
 
 import io.flutter.embedding.android.FlutterActivity
 

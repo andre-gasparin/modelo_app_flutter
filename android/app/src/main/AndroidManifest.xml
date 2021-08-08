@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.meuappnovo">
+    package="com.example.usarprovide">
    <application
-        android:label="meuappnovo"
+        android:label="usarprovide"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
