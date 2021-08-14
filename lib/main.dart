@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:usarprovide/controller/inc_controller.dart';
-import 'package:usarprovide/view/home_view.dart';
+import 'package:usarprovide/app_home.dart';
 
 import 'app_routes.dart';
 
@@ -14,15 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Modelo Flutter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider(
-        create: (_) => IncController(),
-        child: HomeView(),
-      ),
+      home: AppHome(),
       routes: AppRoutes.rotas,
     );
   }

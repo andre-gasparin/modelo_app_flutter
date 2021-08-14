@@ -40,7 +40,7 @@ class FormularioView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _atributo = ModalRoute.of(context)!.settings.arguments;
+    //final _atributo = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
