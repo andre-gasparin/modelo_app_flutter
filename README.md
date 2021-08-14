@@ -4,7 +4,5 @@ Modelo inicial para projetos pequenos em flutter com sistema de autenticação e
 
 ## ChangeLog
 
-0.0.1
-	Projeto inicial
-0.0.2
-	Inclusão do sistema de login
+0.0.1 Projeto inicial
+0.0.2 Inclusão do sistema de login
