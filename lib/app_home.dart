@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usarprovide/app_routes.dart';
+import 'package:usarprovide/controller/login_controller.dart';
 
 class AppHome extends StatefulWidget {
   const AppHome({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class _AppHomeState extends State<AppHome> {
   @override
   void initState() {
     super.initState();
-    verificarToken().then((value) {
+    LoginController.verificarToken().then((value) {
       if (value) {
         Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
       } else {
@@ -33,21 +33,12 @@ class _AppHomeState extends State<AppHome> {
             textStyle: const TextStyle(fontSize: 20),
           ),
           onPressed: () {
-            verificarToken();
+            LoginController.verificarToken();
           },
-          child: const Text('teste'),
+          child: const Text(''),
         ),
-
         //CircularProgressIndicator(),
       ),
     );
-  }
-
-  Future<bool> verificarToken() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString('token') != null)
-      return true;
-    else
-      return false;
   }
 }

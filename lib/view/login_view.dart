@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:usarprovide/app_routes.dart';
+import 'package:usarprovide/controller/login_controller.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -53,12 +51,11 @@ class _LoginViewState extends State<LoginView> {
                     onPressed: () async {
                       FocusScopeNode currentFocus = FocusScope.of(context);
                       if (_formkey.currentState!.validate()) {
-                        bool logou = await login(
+                        bool logou = await LoginController.fazerLogin(
                             _usuarioController.text, _senhaController.text);
                         if (!currentFocus.hasPrimaryFocus) {
                           currentFocus.unfocus();
                         }
-
                         if (logou) {
                           Navigator.of(context)
                               .pushReplacementNamed(AppRoutes.HOME);
@@ -80,30 +77,4 @@ class _LoginViewState extends State<LoginView> {
   final mensagem = SnackBar(
       content: Text('Email ou senha inválidos', textAlign: TextAlign.center),
       backgroundColor: Colors.red[600]);
-
-  Future<bool> login(String login, String senha) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var url = Uri.parse('http://192.168.0.111/apiflutter/rest.php');
-    var resposta = await http.post(url,
-        body: json.encode({
-          "password": "$senha",
-          "login": "$login",
-          "class": "ApplicationAuthenticationRestService",
-          "method": "getToken"
-        }),
-        headers: {
-          "Authorization":
-              "Basic 53da1d5d4f652dbccd2ba5b139448a0d0b9093a8c1827220298d06b013a8"
-        });
-
-    var respostaJson = json.decode(resposta.body);
-
-    if (resposta.statusCode != 200 || respostaJson['status'] == 'error') {
-      return false;
-    } else {
-      final token = respostaJson['data'];
-      await sharedPreferences.setString('token', token);
-      return true;
-    }
-  }
 }
