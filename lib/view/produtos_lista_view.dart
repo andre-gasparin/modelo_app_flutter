@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usarprovide/controller/produtos_controller.dart';
-import 'package:usarprovide/model/produtos_model.dart';
+import 'package:usarprovide/utils/controller_mixin.dart';
 
 class ListaView extends StatefulWidget {
   const ListaView({Key? key}) : super(key: key);
@@ -9,60 +9,43 @@ class ListaView extends StatefulWidget {
   _ListaViewState createState() => _ListaViewState();
 }
 
-class _ListaViewState extends State<ListaView> {
-  // final lista = ProdutosModel();
-  String _estado = 'carregando';
-  List<ProdutosModel> _todos = [];
+class _ListaViewState extends State<ListaView> with ControllerMixin {
+  final controle = ProdutosController();
 
-  void _alterarEstado(String estado) {
-    setState(() {
-      _estado = estado;
-    });
+  sucesso() => ListView.builder(
+        itemCount: controle.itens.length,
+        itemBuilder: (ctx, i) {
+          return Card(
+            child: ListTile(
+              leading: FlutterLogo(size: 72.0),
+              title: Text('${controle.itens[i].nome}'),
+              subtitle: Text('${controle.itens[i].valor}'),
+              trailing: Icon(Icons.edit),
+              isThreeLine: true,
+            ),
+          );
+        },
+      );
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    controle.iniciar();
   }
-
-  Future<List<ProdutosModel>> _todosProdutos() async {
-    _todos = await ProdutosController.listarProduto();
-    _alterarEstado('concluido');
-    return _todos;
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _todosProdutos();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Listagem: $_estado'),
+        title: Text('Listagem'),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: FutureBuilder<List<ProdutosModel>>(
-          future: _todosProdutos(), //ProdutosController.listarProduto(),
-          builder: (context, snapshot) {
-            //if (!snapshot.hasData)
-            if (_estado == 'carregando') {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (ctx, i) {
-                return Card(
-                  child: ListTile(
-                    leading: FlutterLogo(size: 72.0),
-                    title: Text('${snapshot.data![i].nome}'),
-                    subtitle: Text('${snapshot.data![i].descricao}'),
-                    trailing: Icon(Icons.edit),
-                    isThreeLine: true,
-                  ),
-                );
-              },
-            );
+        child: AnimatedBuilder(
+          animation: controle.estado,
+          builder: (context, child) {
+            return gerenciarEstado(controle.estado.value);
           },
         ),
       ),

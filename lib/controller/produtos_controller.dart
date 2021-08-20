@@ -1,27 +1,26 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:usarprovide/app_const.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:usarprovide/model/produtos_model.dart';
+import 'package:usarprovide/services/webclients/produtos_services.dart';
 
 class ProdutosController {
-  static Future<List<ProdutosModel>> listarProduto() async {
-    var url = Uri.parse(appUrl + '/dados.php');
-    var response = await http.get(url);
-    final responseMap = jsonDecode(response.body);
+  final estado = ValueNotifier<EstadoPagina>(EstadoPagina.inicio);
+  List<ProdutosModel> itens = [];
 
-    var retorno = responseMap
-        .map<ProdutosModel>((resp) => ProdutosModel.fromMap(resp))
-        .toList();
+  Future iniciar() async {
+    estado.value = EstadoPagina.carregando;
 
-    if (response.statusCode == 200) {
-      return retorno;
-    } else {
-      return retorno;
+    try {
+      itens = await ProdutosServices.listar();
+
+      estado.value = EstadoPagina.sucesso;
+    } catch (e) {
+      estado.value = EstadoPagina.erro;
     }
   }
 
   static salvarProduto(ProdutosModel produto) {
-    print('${produto.nome} e aaa descricao: ${produto.descricao}');
+    print('${produto.nome} e aaa descricao: ${produto.valor}');
   }
 }
+
+enum EstadoPagina { inicio, carregando, sucesso, erro }

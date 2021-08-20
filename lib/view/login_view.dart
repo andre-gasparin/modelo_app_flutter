@@ -51,17 +51,23 @@ class _LoginViewState extends State<LoginView> {
                     onPressed: () async {
                       FocusScopeNode currentFocus = FocusScope.of(context);
                       if (_formkey.currentState!.validate()) {
-                        bool logou = await LoginController.fazerLogin(
-                            _usuarioController.text, _senhaController.text);
+                        Map<String, dynamic> logou =
+                            await LoginController.fazerLogin(
+                                _usuarioController.text, _senhaController.text);
                         if (!currentFocus.hasPrimaryFocus) {
                           currentFocus.unfocus();
                         }
-                        if (logou) {
+
+                        if (logou['status'] == 'success') {
                           Navigator.of(context)
                               .pushReplacementNamed(AppRoutes.HOME);
                         } else {
                           _senhaController.clear();
-                          ScaffoldMessenger.of(context).showSnackBar(mensagem);
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(logou['data'],
+                                  textAlign: TextAlign.center),
+                              backgroundColor: Colors.red[600]));
                         }
                       }
                     },
@@ -73,8 +79,4 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
-
-  final mensagem = SnackBar(
-      content: Text('Email ou senha inválidos', textAlign: TextAlign.center),
-      backgroundColor: Colors.red[600]);
 }

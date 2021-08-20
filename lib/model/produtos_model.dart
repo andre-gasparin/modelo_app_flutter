@@ -2,21 +2,21 @@ import 'dart:convert';
 
 class ProdutosModel {
   final String? nome;
-  final String? descricao;
+  final double? valor;
 
-  ProdutosModel({this.nome, this.descricao});
+  ProdutosModel({this.nome, this.valor});
 
   Map<String, dynamic> toMap() {
     return {
       'nome': nome,
-      'descricao': descricao,
+      'valor': valor,
     };
   }
 
   factory ProdutosModel.fromMap(Map<String, dynamic> map) {
     return ProdutosModel(
       nome: map['nome'],
-      descricao: map['descricao'],
+      valor: map['valor'] != "" ? double.parse(map['valor']) : null,
     );
   }
 

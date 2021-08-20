@@ -1,32 +1,18 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:usarprovide/services/webclients/login_services.dart';
 
 class LoginController {
-  static Future<bool> fazerLogin(String login, String senha) async {
+  static Future<Map<String, dynamic>> fazerLogin(
+      String login, String senha) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var url = Uri.parse('http://192.168.0.111/apiflutter/rest.php');
-    var resposta = await http.post(url,
-        body: json.encode({
-          "password": "$senha",
-          "login": "$login",
-          "class": "ApplicationAuthenticationRestService",
-          "method": "getToken"
-        }),
-        headers: {
-          "Authorization":
-              "Basic 53da1d5d4f652dbccd2ba5b139448a0d0b9093a8c1827220298d06b013a8"
-        });
+    var resposta = await LoginServices.fazerLogin(login, senha);
 
-    var respostaJson = json.decode(resposta.body);
-
-    if (resposta.statusCode != 200 || respostaJson['status'] == 'error') {
-      return false;
-    } else {
-      final token = respostaJson['data'];
+    if (resposta['status'] == 'success') {
+      final token = resposta['data'];
       await sharedPreferences.setString('token', token);
-      return true;
+      return resposta;
+    } else {
+      return resposta;
     }
   }
 

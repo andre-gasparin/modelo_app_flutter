@@ -13,12 +13,12 @@ class FormularioView extends StatelessWidget {
     );
   }
 
-  Widget campoDescricao() {
+  Widget campoValor() {
     return TextFormField(
-      controller: _campoDescricao,
+      controller: _campoValor,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Descricao',
+        labelText: 'Valor',
         hintText: 'ex: 1',
       ),
     );
@@ -26,17 +26,13 @@ class FormularioView extends StatelessWidget {
 
   _salvarProduto() {
     final String nome = _campoNome.text;
-    final String descricao = _campoDescricao.text;
-
-    final ProdutosModel produtoNovo =
-        ProdutosModel(nome: nome, descricao: descricao);
-
+    final double valor = double.parse(_campoValor.text);
+    final ProdutosModel produtoNovo = ProdutosModel(nome: nome, valor: valor);
     ProdutosController.salvarProduto(produtoNovo);
   }
-//  const FormularioView({Key? key}) : super(key: key);
 
   final TextEditingController _campoNome = TextEditingController();
-  final TextEditingController _campoDescricao = TextEditingController();
+  final TextEditingController _campoValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +56,7 @@ class FormularioView extends StatelessWidget {
           child: Column(
             children: [
               campoNome(),
-              campoDescricao(),
+              campoValor(),
             ],
           ),
         ),
